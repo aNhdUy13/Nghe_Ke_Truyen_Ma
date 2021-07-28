@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "672748596732",
+    "firebase_url": "https://nghe---ke---truyen---ma-default-rtdb.firebaseio.com",
+    "project_id": "nghe---ke---truyen---ma",
+    "storage_bucket": "nghe---ke---truyen---ma.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:672748596732:android:a2f979e76e54c38c5bd679",
+        "android_client_info": {
+          "package_name": "com.nda.ngheketruyenma"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "672748596732-g2paepcm3m1iv9rn7stg5h595419bdei.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXp_BVgEPdu-9XrFBgJz9sQy8ov9GHMU4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "672748596732-g2paepcm3m1iv9rn7stg5h595419bdei.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
