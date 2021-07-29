@@ -1,6 +1,7 @@
 package com.nda.ngheketruyenma;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
@@ -9,6 +10,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -40,13 +43,17 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
 
-
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef  = database.getReference("Truyen Ma");
     
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setStatusBarColor(ContextCompat.getColor(MainActivity.this,R.color.black));
         StartAppSDK.setTestAdsEnabled(true);
         StartAppAd.disableSplash();
+        myRef.keepSynced(true);
 
         setupDrawerMenu();
 

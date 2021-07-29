@@ -1,27 +1,38 @@
 package com.nda.ngheketruyenma.ui.home;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.Image;
 import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
+import com.google.android.youtube.player.YouTubeBaseActivity;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerView;
 import com.nda.ngheketruyenma.R;
+import com.nda.ngheketruyenma.ui.API;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
-public class HomesDetail extends AppCompatActivity implements View.OnClickListener {
+public class HomesDetail extends  YouTubeBaseActivity implements View.OnClickListener {
     ImageView img_story, img_Back, img_playPauseMp3;
     TextView txt_storyAuthor,txt_storyTitle, txt_contentStory,  txt_currentTime, txt_totalDuration;
     String author, storyName, contentStory, mp3, img;
@@ -31,14 +42,25 @@ public class HomesDetail extends AppCompatActivity implements View.OnClickListen
     SeekBar playerSeekBar;
 
     private Handler handler = new Handler();
+
+    private YouTubePlayerView youtubePlayer_view;
+    YouTubePlayer.OnInitializedListener onInitializedListener;
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homes_detail);
+        getWindow().setStatusBarColor(ContextCompat.getColor(HomesDetail.this,R.color.black));
         mapting();
 
         img_Back.setOnClickListener(this);
+
+
+
+
+
         if (bundle.containsKey("storyDetail"))
         {
             author = intent.getStringExtra("authorDetail");
@@ -53,79 +75,95 @@ public class HomesDetail extends AppCompatActivity implements View.OnClickListen
 
             Picasso.get().load(img).into(img_story);
 
-
-            playerSeekBar.setMax(100);
-            img_playPauseMp3.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    if (mediaPlayer.isPlaying())
-                    {
-                        handler.removeCallbacks(updater);
-                        mediaPlayer.pause();
-                        img_playPauseMp3.setImageResource(R.drawable.ic_play);
-
-                    }
-                    else
-                    {
-                        mediaPlayer.start();
-                        img_playPauseMp3.setImageResource(R.drawable.ic_pause);
-                        updateSeekBar();
-                    }
-                }
-            });
-
-            prepareMp3(mp3);
-
             /*
-
-                Go to the specific position ( of mp3 ) in seekBar
+                Load vid from youtube
              */
-            playerSeekBar.setOnTouchListener(new View.OnTouchListener() {
-                @SuppressLint("ClickableViewAccessibility")
+            onInitializedListener = new YouTubePlayer.OnInitializedListener() {
                 @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    SeekBar seekBar = (SeekBar) v;
-                    int playPosition = (mediaPlayer.getDuration() / 100) *  seekBar.getProgress();
-
-                    mediaPlayer.seekTo(playPosition);
-                    txt_currentTime.setText(milillSecondToTime(mediaPlayer.getCurrentPosition()));
-                    return false;
+                public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
+                    youTubePlayer.loadVideo(mp3);
                 }
-            });
 
-            /*
-
-                Create buffering ( of mp3 ) in seekBar = Tạo các bóng trên thanh seekBar
-                    ( biểu thị cho việc mp3 đã load đến đâu )
-             */
-
-            mediaPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
                 @Override
-                public void onBufferingUpdate(MediaPlayer mp, int percent) {
-                    playerSeekBar.setSecondaryProgress(percent);
+                public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+
                 }
-            });
+            };
+            youtubePlayer_view.initialize(API.API_KEY,onInitializedListener);
 
 
-            /*
-
-                When the mp3 run complete
-             */
-
-            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    playerSeekBar.setProgress(0);
-                    img_playPauseMp3.setImageResource(R.drawable.ic_play);
-                    txt_currentTime.setText("0");
-                    txt_totalDuration.setText("0");
-                    mediaPlayer.reset();
-                    prepareMp3(mp3);
-                }
-            });
-
-        }
+//            playerSeekBar.setMax(100);
+//            img_playPauseMp3.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    if (mediaPlayer.isPlaying())
+//                    {
+//                        handler.removeCallbacks(updater);
+//                        mediaPlayer.pause();
+//                        img_playPauseMp3.setImageResource(R.drawable.ic_play);
+//
+//                    }
+//                    else
+//                    {
+//                        mediaPlayer.start();
+//                        img_playPauseMp3.setImageResource(R.drawable.ic_pause);
+//                        updateSeekBar();
+//                    }
+//                }
+//            });
+//
+//            prepareMp3(mp3);
+//
+//            /*
+//
+//                Go to the specific position ( of mp3 ) in seekBar
+//             */
+//            playerSeekBar.setOnTouchListener(new View.OnTouchListener() {
+//                @SuppressLint("ClickableViewAccessibility")
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    SeekBar seekBar = (SeekBar) v;
+//                    int playPosition = (mediaPlayer.getDuration() / 100) *  seekBar.getProgress();
+//
+//                    mediaPlayer.seekTo(playPosition);
+//                    txt_currentTime.setText(milillSecondToTime(mediaPlayer.getCurrentPosition()));
+//                    return false;
+//                }
+//            });
+//
+//            /*
+//
+//                Create buffering ( of mp3 ) in seekBar = Tạo các bóng trên thanh seekBar
+//                    ( biểu thị cho việc mp3 đã load đến đâu )
+//             */
+//
+//            mediaPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
+//                @Override
+//                public void onBufferingUpdate(MediaPlayer mp, int percent) {
+//                    playerSeekBar.setSecondaryProgress(percent);
+//                }
+//            });
+//
+//
+//            /*
+//
+//                When the mp3 run complete
+//             */
+//
+//            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//                @Override
+//                public void onCompletion(MediaPlayer mp) {
+//                    playerSeekBar.setProgress(0);
+//                    img_playPauseMp3.setImageResource(R.drawable.ic_play);
+//                    txt_currentTime.setText("0");
+//                    txt_totalDuration.setText("0");
+//                    mediaPlayer.reset();
+//                    prepareMp3(mp3);
+//                }
+//            });
+//
+       }
     }
 
     private void prepareMp3(String mp3) {
@@ -207,9 +245,10 @@ public class HomesDetail extends AppCompatActivity implements View.OnClickListen
 
   */
     private void mapting() {
+        youtubePlayer_view = (YouTubePlayerView) findViewById(R.id.youtubePlayer_view);
+
         intent = getIntent();
         bundle = intent.getExtras();
-        img_playPauseMp3    = (ImageView) findViewById(R.id.img_playPauseMp3);
 
         img_Back    = (ImageView) findViewById(R.id.img_Back);
         img_story   = (ImageView) findViewById(R.id.img_story);
@@ -218,9 +257,11 @@ public class HomesDetail extends AppCompatActivity implements View.OnClickListen
         txt_contentStory   = (TextView) findViewById(R.id.txt_contentStory);
 
         mediaPlayer = new MediaPlayer();
-        txt_currentTime     = (TextView) findViewById(R.id.txt_currentTime);
-        txt_totalDuration   = (TextView) findViewById(R.id.txt_totalDuration);
-        playerSeekBar       = (SeekBar) findViewById(R.id.playerSeekBar);
+//        txt_currentTime     = (TextView) findViewById(R.id.txt_currentTime);
+//        txt_totalDuration   = (TextView) findViewById(R.id.txt_totalDuration);
+//        playerSeekBar       = (SeekBar) findViewById(R.id.playerSeekBar);
+//        img_playPauseMp3    = (ImageView) findViewById(R.id.img_playPauseMp3);
+
     }
 
     @Override
