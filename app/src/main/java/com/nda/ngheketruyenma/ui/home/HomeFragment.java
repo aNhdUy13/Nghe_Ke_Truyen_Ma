@@ -19,6 +19,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.nda.ngheketruyenma.MainActivity;
 import com.nda.ngheketruyenma.R;
@@ -39,7 +40,11 @@ public class HomeFragment extends Fragment {
 
     List<Homes> homesList;
     HomesAdapter homesAdapter;
-    RecyclerView rv_home;
+
+    List<HomesHorizontal> homesHorizontalList;
+    AdapterHomesHorizontal adapterHomesHorizontal;
+
+    RecyclerView rv_home, rcv_homeHorizontal;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -59,6 +64,8 @@ public class HomeFragment extends Fragment {
     }
     private void initiate() {
         getAllData();
+
+        getHorizontalData();
     }
 
     private void getAllData() {
@@ -84,6 +91,35 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    private void getHorizontalData()
+    {
+        ValueEventListener  valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull  DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                {
+                    HomesHorizontal homesHorizontal =dataSnapshot.getValue(HomesHorizontal.class);
+
+                    homesHorizontalList.add(homesHorizontal);
+                }
+
+
+                sortData();
+                adapterHomesHorizontal.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull  DatabaseError error) {
+
+            }
+        };
+
+        Query query = myRef.orderByChild("author")
+                .equalTo("Nguyễn Ngọc Ngạn");
+
+        query.addListenerForSingleValueEvent(valueEventListener);
+    }
+
     private void sortData() {
         Collections.sort(homesList, new Comparator<Homes>() {
             @Override
@@ -107,20 +143,30 @@ public class HomeFragment extends Fragment {
 
 
     }
+
+
     private void setupRecycleView() {
         homesList = new ArrayList<>();
         homesAdapter = new HomesAdapter(this,homesList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
         rv_home.setLayoutManager(linearLayoutManager);
         rv_home.setAdapter(homesAdapter);
+
+        homesHorizontalList = new ArrayList<>();
+        adapterHomesHorizontal = new AdapterHomesHorizontal(this,homesHorizontalList);
+        LinearLayoutManager linearLayoutManager_horizontal = new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false);
+        rcv_homeHorizontal.setLayoutManager(linearLayoutManager_horizontal);
+        rcv_homeHorizontal.setAdapter(adapterHomesHorizontal);
     }
 
     private void mapting(View root) {
-        rv_home = (RecyclerView) root.findViewById(R.id.rv_home);
+        rv_home = (RecyclerView) root.findViewById(R.id.rv_homeVertical);
+        rcv_homeHorizontal  = (RecyclerView) root.findViewById(R.id.rcv_homeHorizontal);
     }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
+
 }

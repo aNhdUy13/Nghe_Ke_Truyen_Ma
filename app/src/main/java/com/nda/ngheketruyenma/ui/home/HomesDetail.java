@@ -29,6 +29,10 @@ import com.google.android.youtube.player.YouTubePlayerView;
 import com.nda.ngheketruyenma.R;
 import com.nda.ngheketruyenma.ui.API;
 import com.squareup.picasso.Picasso;
+import com.startapp.sdk.adsbase.Ad;
+import com.startapp.sdk.adsbase.AutoInterstitialPreferences;
+import com.startapp.sdk.adsbase.StartAppAd;
+import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
 
 import java.io.IOException;
 
@@ -56,9 +60,6 @@ public class HomesDetail extends  YouTubeBaseActivity implements View.OnClickLis
         mapting();
 
         img_Back.setOnClickListener(this);
-
-
-
 
 
         if (bundle.containsKey("storyDetail"))
@@ -271,6 +272,10 @@ public class HomesDetail extends  YouTubeBaseActivity implements View.OnClickLis
         {
             mediaPlayer.stop();
             finish();
+            StartAppAd.showAd(this);
         }
+
+
+
     }
 }

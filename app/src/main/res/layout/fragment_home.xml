@@ -13,6 +13,20 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:padding="10dp"
+            android:layout_gravity="center|left"
+            android:layout_weight="3">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcv_homeHorizontal"
+                android:layout_gravity="center|left"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
         <LinearLayout
             android:gravity="center"
             android:layout_width="match_parent"
@@ -31,9 +45,9 @@
             android:weightSum="2"
             android:padding="7dp"
             android:orientation="vertical"
-            android:layout_weight="7.5">
+            android:layout_weight="4.5">
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_home"
+                android:id="@+id/rv_homeVertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </LinearLayout>
