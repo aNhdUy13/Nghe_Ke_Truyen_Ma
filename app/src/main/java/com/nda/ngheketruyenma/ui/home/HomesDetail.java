@@ -1,8 +1,13 @@
 package com.nda.ngheketruyenma.ui.home;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.annotation.UiThread;
+import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -10,9 +15,13 @@ import android.media.AudioManager;
 import android.media.Image;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.JsonReader;
+import android.util.JsonToken;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,17 +35,42 @@ import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
+import com.nda.ngheketruyenma.BuildConfig;
 import com.nda.ngheketruyenma.R;
 import com.nda.ngheketruyenma.ui.API;
+import com.nda.ngheketruyenma.ui.home.nativeAds.AdapterWithNativeAd;
 import com.squareup.picasso.Picasso;
+import com.startapp.sdk.ads.banner.BannerListener;
+import com.startapp.sdk.ads.banner.Mrec;
+import com.startapp.sdk.ads.nativead.NativeAdPreferences;
+import com.startapp.sdk.ads.nativead.StartAppNativeAd;
 import com.startapp.sdk.adsbase.Ad;
 import com.startapp.sdk.adsbase.AutoInterstitialPreferences;
 import com.startapp.sdk.adsbase.StartAppAd;
+import com.startapp.sdk.adsbase.StartAppSDK;
 import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomesDetail extends  YouTubeBaseActivity implements View.OnClickListener {
+    /*
+    Setup native ads
+ */
+    private static final String LOG_TAG = HomesDetail.class.getSimpleName();
+
+    @Nullable
+    protected AdapterWithNativeAd adapter;
+
+    RecyclerView recyclerView;
+
+    /*
+         (END) Setup native ads
+  */
     ImageView img_story, img_Back, img_playPauseMp3;
     TextView txt_storyAuthor,txt_storyTitle, txt_contentStory,  txt_currentTime, txt_totalDuration;
     String author, storyName, contentStory, mp3, img;
@@ -58,8 +92,8 @@ public class HomesDetail extends  YouTubeBaseActivity implements View.OnClickLis
         setContentView(R.layout.activity_homes_detail);
         getWindow().setStatusBarColor(ContextCompat.getColor(HomesDetail.this,R.color.black));
         mapting();
-
         img_Back.setOnClickListener(this);
+        nativeAds();
 
 
         if (bundle.containsKey("storyDetail"))
@@ -90,7 +124,13 @@ public class HomesDetail extends  YouTubeBaseActivity implements View.OnClickLis
 
                 }
             };
-            youtubePlayer_view.initialize(API.API_KEY,onInitializedListener);
+            try
+            {
+                youtubePlayer_view.initialize(API.API_KEY,onInitializedListener);
+            }catch (Exception e)
+            {
+                Toast.makeText(this, "Error Occur : API (DETAIL)", Toast.LENGTH_SHORT).show();
+            }
 
 
 //            playerSeekBar.setMax(100);
@@ -263,6 +303,11 @@ public class HomesDetail extends  YouTubeBaseActivity implements View.OnClickLis
 //        playerSeekBar       = (SeekBar) findViewById(R.id.playerSeekBar);
 //        img_playPauseMp3    = (ImageView) findViewById(R.id.img_playPauseMp3);
 
+
+        /*
+            Ads
+         */
+
     }
 
     @Override
@@ -277,5 +322,85 @@ public class HomesDetail extends  YouTubeBaseActivity implements View.OnClickLis
 
 
 
+    }
+
+    private void nativeAds() {
+        // NOTE always use test ads during development and testing
+        StartAppSDK.setTestAdsEnabled(BuildConfig.DEBUG);
+
+//        setContentView(R.layout.recycler_view);
+
+        recyclerView = findViewById(R.id.rcv_homeDetail);
+        recyclerView.setLayoutManager(new LinearLayoutManager(HomesDetail.this, RecyclerView.VERTICAL, false));
+        recyclerView.setAdapter(adapter = new AdapterWithNativeAd(HomesDetail.this));
+
+        loadData();
+        loadNativeAd();
+    }
+    private void loadNativeAd() {
+        final StartAppNativeAd nativeAd = new StartAppNativeAd(HomesDetail.this);
+
+        nativeAd.loadAd(new NativeAdPreferences()
+                .setAdsNumber(1)
+                .setAutoBitmapDownload(true)
+                .setPrimaryImageSize(2), new AdEventListener() {
+            @Override
+            public void onReceiveAd(Ad ad) {
+                if (adapter != null) {
+                    adapter.setNativeAd(nativeAd.getNativeAds());
+                }
+            }
+
+            @Override
+            public void onFailedToReceiveAd(Ad ad) {
+                if (BuildConfig.DEBUG) {
+                    recyclerView.setVisibility(View.GONE);
+                    Log.v(LOG_TAG, "onFailedToReceiveAd: " + ad.getErrorMessage());
+                }
+            }
+        });
+    }
+
+    // TODO example of loading JSON array, change this code according to your needs
+    @UiThread
+    private void loadData() {
+        if (adapter != null) {
+//            adapter.setData(Collections.singletonList("Loading..."));
+        }
+
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(new Runnable() {
+            @Override
+            @WorkerThread
+            public void run() {
+                String url = "https://raw.githubusercontent.com/StartApp-SDK/StartApp_InApp_SDK_Example/master/app/data.json";
+
+                final List<String> data = new ArrayList<>();
+
+                try (InputStream is = new URL(url).openStream()) {
+                    if (is != null) {
+                        JsonReader reader = new JsonReader(new InputStreamReader(is));
+                        reader.beginArray();
+
+                        while (reader.peek() == JsonToken.STRING) {
+                            data.add(reader.nextString());
+                        }
+
+                        reader.endArray();
+                    }
+                } catch (RuntimeException | IOException ex) {
+                    data.clear();
+                    data.add(ex.toString());
+                } finally {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (adapter != null) {
+//                                adapter.setData(data);
+//                            }
+//                        }
+//                    });
+                }
+            }
+        });
     }
 }

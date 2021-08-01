@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -64,14 +65,14 @@ public class AdapterHomesHorizontal extends RecyclerView.Adapter<AdapterHomesHor
     }
 
     public class HomesHorizontalViewHolder extends RecyclerView.ViewHolder {
-        LinearLayout ll_item_homeHorizontal;
+        RelativeLayout ll_item_homeHorizontal;
         ImageView img_itemHomeHorizontal;
         TextView txt_ShowStoriesNameHorizontal;
         public HomesHorizontalViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             txt_ShowStoriesNameHorizontal = (TextView) itemView.findViewById(R.id.txt_ShowStoriesNameHorizontal);
             img_itemHomeHorizontal = (ImageView) itemView.findViewById(R.id.img_itemHomeHorizontal);
-            ll_item_homeHorizontal = (LinearLayout) itemView.findViewById(R.id.ll_item_homeHorizontal);
+            ll_item_homeHorizontal = (RelativeLayout) itemView.findViewById(R.id.ll_item_homeHorizontal);
 
         }
     }

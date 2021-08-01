@@ -1,6 +1,9 @@
 package com.nda.ngheketruyenma;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +30,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.nda.ngheketruyenma.databinding.ActivityMainBinding;
+import com.nda.ngheketruyenma.ui.ConnectionReceiver;
+import com.nda.ngheketruyenma.ui.home.HomeFragment;
 import com.nda.ngheketruyenma.ui.home.Homes;
 import com.nda.ngheketruyenma.ui.home.HomesAdapter;
 import com.nda.ngheketruyenma.ui.home.HomesDetail;
@@ -45,21 +50,65 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef  = database.getReference("Truyen Ma");
-    
+
+    BroadcastReceiver broadcastReceiver;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setStatusBarColor(ContextCompat.getColor(MainActivity.this,R.color.black));
+        broadcastReceiver = new ConnectionReceiver();
+        regisorNetworkBroadcast();
+
         StartAppSDK.setTestAdsEnabled(true);
         StartAppAd.disableSplash();
         myRef.keepSynced(true);
 
+
+
         setupDrawerMenu();
 
     }
+    /*
+        setUp network connection
+     */
+    protected void regisorNetworkBroadcast()
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+    }
 
+    protected  void unRegistorNetwork()
+    {
+        try {
+            unregisterReceiver(broadcastReceiver);
+        }catch (IllegalArgumentException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unRegistorNetwork();
+    }
+    /*
+        setUp network connection
+     */
+    @Override
+    public void onBackPressed() {
+        if (!HomeFragment.search_view.isIconified())
+        {
+            HomeFragment.search_view.setIconified(true);
+            return;
+        }
+
+        super.onBackPressed();
+    }
 
     private void setupDrawerMenu() {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
