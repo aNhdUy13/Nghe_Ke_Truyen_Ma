@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         broadcastReceiver = new ConnectionReceiver();
         regisorNetworkBroadcast();
 
-        StartAppSDK.setTestAdsEnabled(true);
+        //StartAppSDK.setTestAdsEnabled(true);
         StartAppAd.disableSplash();
         myRef.keepSynced(true);
 

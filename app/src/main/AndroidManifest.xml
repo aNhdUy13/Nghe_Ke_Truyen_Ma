@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/app_logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NgheKeTruyenMa">
-        <activity android:name=".ui.setting.GetCoin"
+        <activity android:name=".ui.setting.billing.GetCoin"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
         <activity

@@ -233,6 +233,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="8dp"/>
                     <LinearLayout
+                        android:id="@+id/ll_rcvHomeDetailNativeAds"
+                        android:visibility="gone"
                         android:padding="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="110dp">

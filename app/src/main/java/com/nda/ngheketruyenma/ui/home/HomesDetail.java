@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -67,6 +68,7 @@ public class HomesDetail extends  YouTubeBaseActivity implements View.OnClickLis
     protected AdapterWithNativeAd adapter;
 
     RecyclerView recyclerView;
+    LinearLayout ll_rcvHomeDetailNativeAds;
 
     /*
          (END) Setup native ads
@@ -298,6 +300,8 @@ public class HomesDetail extends  YouTubeBaseActivity implements View.OnClickLis
         txt_contentStory   = (TextView) findViewById(R.id.txt_contentStory);
 
         mediaPlayer = new MediaPlayer();
+
+        ll_rcvHomeDetailNativeAds   = (LinearLayout) findViewById(R.id.ll_rcvHomeDetailNativeAds);
 //        txt_currentTime     = (TextView) findViewById(R.id.txt_currentTime);
 //        txt_totalDuration   = (TextView) findViewById(R.id.txt_totalDuration);
 //        playerSeekBar       = (SeekBar) findViewById(R.id.playerSeekBar);
@@ -326,7 +330,7 @@ public class HomesDetail extends  YouTubeBaseActivity implements View.OnClickLis
 
     private void nativeAds() {
         // NOTE always use test ads during development and testing
-        StartAppSDK.setTestAdsEnabled(BuildConfig.DEBUG);
+        //StartAppSDK.setTestAdsEnabled(BuildConfig.DEBUG);
 
 //        setContentView(R.layout.recycler_view);
 
@@ -347,6 +351,7 @@ public class HomesDetail extends  YouTubeBaseActivity implements View.OnClickLis
             @Override
             public void onReceiveAd(Ad ad) {
                 if (adapter != null) {
+                    ll_rcvHomeDetailNativeAds.setVisibility(View.VISIBLE);
                     adapter.setNativeAd(nativeAd.getNativeAds());
                 }
             }

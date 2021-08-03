@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -59,6 +60,7 @@ public class HomeFragment extends Fragment {
     protected AdapterWithNativeAd adapter;
 
     RecyclerView recyclerView;
+    LinearLayout ll_rcvHomeNativeAds;
 
        /*
             (END) Setup native ads
@@ -214,6 +216,8 @@ public class HomeFragment extends Fragment {
         rcv_homeHorizontal  = (RecyclerView) root.findViewById(R.id.rcv_homeHorizontal);
 
         search_view = (SearchView) root.findViewById(R.id.search_view);
+
+        ll_rcvHomeNativeAds = (LinearLayout) root.findViewById(R.id.ll_rcvHomeNativeAds);
     }
     @Override
     public void onDestroyView() {
@@ -223,7 +227,7 @@ public class HomeFragment extends Fragment {
 
     private void nativeAds(View root) {
         // NOTE always use test ads during development and testing
-        StartAppSDK.setTestAdsEnabled(BuildConfig.DEBUG);
+        //StartAppSDK.setTestAdsEnabled(BuildConfig.DEBUG);
 
 //        setContentView(R.layout.recycler_view);
 
@@ -244,6 +248,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onReceiveAd(Ad ad) {
                 if (adapter != null) {
+                    ll_rcvHomeNativeAds.setVisibility(View.VISIBLE);
                     adapter.setNativeAd(nativeAd.getNativeAds());
                 }
             }
@@ -251,7 +256,6 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailedToReceiveAd(Ad ad) {
                 if (BuildConfig.DEBUG) {
-                    recyclerView.setVisibility(View.GONE);
                     Log.v(LOG_TAG, "onFailedToReceiveAd: " + ad.getErrorMessage());
                 }
             }
