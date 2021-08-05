@@ -20,13 +20,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.nda.ngheketruyenma.BuildConfig;
 import com.nda.ngheketruyenma.R;
 import com.nda.ngheketruyenma.databinding.FragmentSettingBinding;
 import com.nda.ngheketruyenma.ui.home.nativeAds.AdapterWithNativeAd;
 import com.nda.ngheketruyenma.ui.setting.billing.GetCoin;
+import com.nda.ngheketruyenma.ui.setting.premium.PremiumFunction;
 import com.startapp.sdk.ads.nativead.NativeAdPreferences;
 import com.startapp.sdk.ads.nativead.StartAppNativeAd;
 import com.startapp.sdk.adsbase.Ad;
@@ -49,7 +49,7 @@ public class SettingFragment extends Fragment {
     @Nullable
     protected AdapterWithNativeAd adapter;
     RecyclerView rcv_nativeAdsSetting;
-    CardView cv_nativeAdsSetting;
+    CardView cv_nativeAdsSetting, cv_goToPremium;
     /*
         ( END ) Regarding native ads
      */
@@ -88,6 +88,13 @@ public class SettingFragment extends Fragment {
                 startActivity(new Intent(getContext(), GetCoin.class));
             }
         });
+
+        cv_goToPremium.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), PremiumFunction.class));
+            }
+        });
     }
     private void shareApp() {
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -110,6 +117,7 @@ public class SettingFragment extends Fragment {
         rcv_nativeAdsSetting    = (RecyclerView) root.findViewById(R.id.rcv_nativeAdsSetting);
         cv_nativeAdsSetting     = (CardView) root.findViewById(R.id.cv_nativeAdsSetting);
 
+        cv_goToPremium          = (CardView) root.findViewById(R.id.cv_goToPremium);
     }
 
     @Override

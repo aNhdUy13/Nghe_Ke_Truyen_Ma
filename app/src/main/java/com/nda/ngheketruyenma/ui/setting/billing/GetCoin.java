@@ -5,11 +5,11 @@ import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,17 +17,13 @@ import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
-import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.ConsumeParams;
 import com.android.billingclient.api.ConsumeResponseListener;
@@ -39,6 +35,7 @@ import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.nda.ngheketruyenma.BuildConfig;
 import com.nda.ngheketruyenma.R;
 import com.nda.ngheketruyenma.ui.home.nativeAds.AdapterWithNativeAd;
+import com.nda.ngheketruyenma.ui.setting.premium.PremiumFunction;
 import com.startapp.sdk.ads.nativead.NativeAdPreferences;
 import com.startapp.sdk.ads.nativead.StartAppNativeAd;
 import com.startapp.sdk.adsbase.Ad;
@@ -51,7 +48,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class GetCoin extends AppCompatActivity implements PurchasesUpdatedListener {
@@ -71,7 +67,7 @@ public class GetCoin extends AppCompatActivity implements PurchasesUpdatedListen
     RecyclerView rcvGetCoin;
     MyProductAdapter myProductAdapter;
 
-    ImageView img_Back;
+    ImageView img_Back, img_premium;
 
     public static int coin;
     @SuppressLint("StaticFieldLeak")
@@ -97,6 +93,14 @@ public class GetCoin extends AppCompatActivity implements PurchasesUpdatedListen
         ll_nativeAdsGetCoin = (LinearLayout) findViewById(R.id.ll_nativeAdsGetCoin);
         txtXu   = (TextView) findViewById(R.id.txtXu);
         rcvGetCoin  = (RecyclerView) findViewById(R.id.rcvGetCoin);
+        img_premium = (ImageView) findViewById(R.id.img_premium);
+
+        img_premium.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(GetCoin.this, PremiumFunction.class));
+            }
+        });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(GetCoin.this,RecyclerView.VERTICAL,false);
         rcvGetCoin.setLayoutManager(linearLayoutManager);

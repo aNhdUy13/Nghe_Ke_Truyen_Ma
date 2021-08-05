@@ -15,16 +15,46 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:weightSum="3"
             android:background="@color/black"
-            android:gravity="center|left"
             android:layout_weight="0.7">
 
-            <ImageView
-                android:id="@+id/img_Back"
-                android:src="@drawable/ic_left_arrow"
-                android:layout_marginLeft="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center|left"
+                android:layout_weight="0.75">
+                <ImageView
+                    android:id="@+id/img_Back"
+                    android:src="@drawable/ic_left_arrow"
+                    android:layout_marginLeft="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center|left"
+                android:layout_weight="1.5">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center|right"
+                android:layout_weight="0.75">
+                <ImageView
+                    android:visibility="gone"
+                    android:id="@+id/img_premium"
+                    android:src="@drawable/ic_premium"
+                    android:layout_marginRight="10dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"/>
+            </LinearLayout>
+
+
 
         </LinearLayout>
         <LinearLayout
@@ -43,6 +73,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rcvGetCoin"
+                            android:layout_gravity="center"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
                         <LinearLayout
                             android:id="@+id/ll_nativeAdsGetCoin"
                             android:layout_marginTop="15dp"
@@ -54,13 +91,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"/>
                         </LinearLayout>
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/rcvGetCoin"
-                            android:layout_gravity="center"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-
 
 
                         <LinearLayout

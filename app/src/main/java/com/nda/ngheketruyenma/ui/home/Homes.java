@@ -6,7 +6,7 @@ public class Homes {
     public Homes(){}
     public Homes(String author, String content,String image, String name,String newStory, String source) {
         this.author = author;
-        this.content = content;
+        this.content = content; // Chưa Cập Nhập Nội Dung
         this.name = name;
         this.newStory = newStory;
         this.image = image;
