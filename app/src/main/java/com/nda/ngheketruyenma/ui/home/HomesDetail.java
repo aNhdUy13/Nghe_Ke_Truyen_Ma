@@ -6,6 +6,7 @@ import androidx.annotation.UiThread;
 import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.multidex.BuildConfig;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,7 +37,6 @@ import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
-import com.nda.ngheketruyenma.BuildConfig;
 import com.nda.ngheketruyenma.R;
 import com.nda.ngheketruyenma.ui.API;
 import com.nda.ngheketruyenma.ui.home.nativeAds.AdapterWithNativeAd;

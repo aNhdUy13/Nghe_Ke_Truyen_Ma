@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.multidex.BuildConfig;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,7 +33,6 @@ import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
-import com.nda.ngheketruyenma.BuildConfig;
 import com.nda.ngheketruyenma.R;
 import com.nda.ngheketruyenma.ui.home.nativeAds.AdapterWithNativeAd;
 import com.nda.ngheketruyenma.ui.setting.premium.PremiumFunction;
@@ -80,6 +80,8 @@ public class GetCoin extends AppCompatActivity implements PurchasesUpdatedListen
         add("3_coin");
         add("4_coin");
         add("5_coin");
+        add("10_coin");
+        add("20_coin");
 
     }};
 
@@ -215,6 +217,18 @@ public class GetCoin extends AppCompatActivity implements PurchasesUpdatedListen
                                     if (index == 4)
                                     {
                                         coin = coin + 5;
+                                        txtXu.setText(String.valueOf(coin));
+                                    }
+
+                                    if (index == 5)
+                                    {
+                                        coin = coin + 10;
+                                        txtXu.setText(String.valueOf(coin));
+                                    }
+
+                                    if (index == 6)
+                                    {
+                                        coin = coin + 20;
                                         txtXu.setText(String.valueOf(coin));
                                     }
 //                                    int consumeCountValue=getPurchaseCountValueFromPref(skuList.get(index))+1;
