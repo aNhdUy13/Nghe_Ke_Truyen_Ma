@@ -8,12 +8,12 @@
 
     tools:context=".ui.home.HomesDetail">
 
-    <com.startapp.sdk.ads.banner.Banner
-        android:layout_width="wrap_content"
-        android:elevation="8dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="30dp"/>
+<!--    <com.startapp.sdk.ads.banner.Banner-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:elevation="8dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_marginLeft="30dp"/>-->
     <LinearLayout
         android:background="@drawable/app_background"
         android:layout_width="match_parent"
@@ -229,20 +229,29 @@
                             </androidx.core.widget.NestedScrollView>
                         </LinearLayout>
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="8dp"/>
-                    <LinearLayout
-                        android:id="@+id/ll_rcvHomeDetailNativeAds"
-                        android:visibility="gone"
-                        android:padding="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="110dp">
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/rcv_homeDetail"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
+<!--                    <LinearLayout-->
+<!--                        android:id="@+id/ll_rcvHomeDetailNativeAds"-->
+<!--                        android:visibility="gone"-->
+<!--                        android:padding="10dp"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="110dp">-->
+<!--                        <androidx.recyclerview.widget.RecyclerView-->
+<!--                            android:id="@+id/rcv_homeDetail"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="match_parent"/>-->
 
+<!--                    </LinearLayout>-->
+                    <LinearLayout
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.startapp.sdk.ads.banner.Banner
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"

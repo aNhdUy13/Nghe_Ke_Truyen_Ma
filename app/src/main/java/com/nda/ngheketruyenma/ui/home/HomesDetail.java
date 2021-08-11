@@ -95,7 +95,7 @@ public class HomesDetail extends  YouTubeBaseActivity implements View.OnClickLis
         getWindow().setStatusBarColor(ContextCompat.getColor(HomesDetail.this,R.color.black));
         mapting();
         img_Back.setOnClickListener(this);
-        nativeAds();
+        //nativeAds();
 
 
         if (bundle.containsKey("storyDetail"))
@@ -301,7 +301,8 @@ public class HomesDetail extends  YouTubeBaseActivity implements View.OnClickLis
 
         mediaPlayer = new MediaPlayer();
 
-        ll_rcvHomeDetailNativeAds   = (LinearLayout) findViewById(R.id.ll_rcvHomeDetailNativeAds);
+//        ll_rcvHomeDetailNativeAds   = (LinearLayout) findViewById(R.id.ll_rcvHomeDetailNativeAds);
+
 //        txt_currentTime     = (TextView) findViewById(R.id.txt_currentTime);
 //        txt_totalDuration   = (TextView) findViewById(R.id.txt_totalDuration);
 //        playerSeekBar       = (SeekBar) findViewById(R.id.playerSeekBar);
@@ -328,84 +329,84 @@ public class HomesDetail extends  YouTubeBaseActivity implements View.OnClickLis
 
     }
 
-    private void nativeAds() {
-        // NOTE always use test ads during development and testing
-        //StartAppSDK.setTestAdsEnabled(BuildConfig.DEBUG);
-
-//        setContentView(R.layout.recycler_view);
-
-        recyclerView = findViewById(R.id.rcv_homeDetail);
-        recyclerView.setLayoutManager(new LinearLayoutManager(HomesDetail.this, RecyclerView.VERTICAL, false));
-        recyclerView.setAdapter(adapter = new AdapterWithNativeAd(HomesDetail.this));
-
-        loadData();
-        loadNativeAd();
-    }
-    private void loadNativeAd() {
-        final StartAppNativeAd nativeAd = new StartAppNativeAd(HomesDetail.this);
-
-        nativeAd.loadAd(new NativeAdPreferences()
-                .setAdsNumber(1)
-                .setAutoBitmapDownload(true)
-                .setPrimaryImageSize(2), new AdEventListener() {
-            @Override
-            public void onReceiveAd(Ad ad) {
-                if (adapter != null) {
-                    ll_rcvHomeDetailNativeAds.setVisibility(View.VISIBLE);
-                    adapter.setNativeAd(nativeAd.getNativeAds());
-                }
-            }
-
-            @Override
-            public void onFailedToReceiveAd(Ad ad) {
-                if (BuildConfig.DEBUG) {
-                    recyclerView.setVisibility(View.GONE);
-                    Log.v(LOG_TAG, "onFailedToReceiveAd: " + ad.getErrorMessage());
-                }
-            }
-        });
-    }
-
-    // TODO example of loading JSON array, change this code according to your needs
-    @UiThread
-    private void loadData() {
-        if (adapter != null) {
-//            adapter.setData(Collections.singletonList("Loading..."));
-        }
-
-        AsyncTask.THREAD_POOL_EXECUTOR.execute(new Runnable() {
-            @Override
-            @WorkerThread
-            public void run() {
-                String url = "https://raw.githubusercontent.com/StartApp-SDK/StartApp_InApp_SDK_Example/master/app/data.json";
-
-                final List<String> data = new ArrayList<>();
-
-                try (InputStream is = new URL(url).openStream()) {
-                    if (is != null) {
-                        JsonReader reader = new JsonReader(new InputStreamReader(is));
-                        reader.beginArray();
-
-                        while (reader.peek() == JsonToken.STRING) {
-                            data.add(reader.nextString());
-                        }
-
-                        reader.endArray();
-                    }
-                } catch (RuntimeException | IOException ex) {
-                    data.clear();
-                    data.add(ex.toString());
-                } finally {
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            if (adapter != null) {
-//                                adapter.setData(data);
-//                            }
+//    private void nativeAds() {
+//        // NOTE always use test ads during development and testing
+//        //StartAppSDK.setTestAdsEnabled(BuildConfig.DEBUG);
+//
+////        setContentView(R.layout.recycler_view);
+//
+//        recyclerView = findViewById(R.id.rcv_homeDetail);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(HomesDetail.this, RecyclerView.VERTICAL, false));
+//        recyclerView.setAdapter(adapter = new AdapterWithNativeAd(HomesDetail.this));
+//
+//        loadData();
+//        loadNativeAd();
+//    }
+//    private void loadNativeAd() {
+//        final StartAppNativeAd nativeAd = new StartAppNativeAd(HomesDetail.this);
+//
+//        nativeAd.loadAd(new NativeAdPreferences()
+//                .setAdsNumber(1)
+//                .setAutoBitmapDownload(true)
+//                .setPrimaryImageSize(2), new AdEventListener() {
+//            @Override
+//            public void onReceiveAd(Ad ad) {
+//                if (adapter != null) {
+//                    ll_rcvHomeDetailNativeAds.setVisibility(View.VISIBLE);
+//                    adapter.setNativeAd(nativeAd.getNativeAds());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailedToReceiveAd(Ad ad) {
+//                if (BuildConfig.DEBUG) {
+//                    recyclerView.setVisibility(View.GONE);
+//                    Log.v(LOG_TAG, "onFailedToReceiveAd: " + ad.getErrorMessage());
+//                }
+//            }
+//        });
+//    }
+//
+//    // TODO example of loading JSON array, change this code according to your needs
+//    @UiThread
+//    private void loadData() {
+//        if (adapter != null) {
+////            adapter.setData(Collections.singletonList("Loading..."));
+//        }
+//
+//        AsyncTask.THREAD_POOL_EXECUTOR.execute(new Runnable() {
+//            @Override
+//            @WorkerThread
+//            public void run() {
+//                String url = "https://raw.githubusercontent.com/StartApp-SDK/StartApp_InApp_SDK_Example/master/app/data.json";
+//
+//                final List<String> data = new ArrayList<>();
+//
+//                try (InputStream is = new URL(url).openStream()) {
+//                    if (is != null) {
+//                        JsonReader reader = new JsonReader(new InputStreamReader(is));
+//                        reader.beginArray();
+//
+//                        while (reader.peek() == JsonToken.STRING) {
+//                            data.add(reader.nextString());
 //                        }
-//                    });
-                }
-            }
-        });
-    }
+//
+//                        reader.endArray();
+//                    }
+//                } catch (RuntimeException | IOException ex) {
+//                    data.clear();
+//                    data.add(ex.toString());
+//                } finally {
+////                    runOnUiThread(new Runnable() {
+////                        @Override
+////                        public void run() {
+////                            if (adapter != null) {
+////                                adapter.setData(data);
+////                            }
+////                        }
+////                    });
+//                }
+//            }
+//        });
+//    }
 }
