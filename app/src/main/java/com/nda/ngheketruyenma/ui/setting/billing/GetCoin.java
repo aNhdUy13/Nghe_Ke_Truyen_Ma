@@ -34,12 +34,8 @@ import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.nda.ngheketruyenma.R;
-import com.nda.ngheketruyenma.ui.home.nativeAds.AdapterWithNativeAd;
 import com.nda.ngheketruyenma.ui.setting.premium.PremiumFunction;
-import com.startapp.sdk.ads.nativead.NativeAdPreferences;
-import com.startapp.sdk.ads.nativead.StartAppNativeAd;
-import com.startapp.sdk.adsbase.Ad;
-import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
+
 
 import org.jetbrains.annotations.NotNull;
 
@@ -51,18 +47,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GetCoin extends AppCompatActivity implements PurchasesUpdatedListener {
-    private static final String LOG_TAG = "native Ads";
-    /*
-            Regarding native ads
-         */
-    @Nullable
-    protected AdapterWithNativeAd adapter;
-    RecyclerView rcx_nativeAds_getCoin;
-    LinearLayout ll_nativeAdsGetCoin;
-    /*
-        ( END ) Regarding native ads
-     */
-
 
     RecyclerView rcvGetCoin;
     MyProductAdapter myProductAdapter;
@@ -92,7 +76,6 @@ public class GetCoin extends AppCompatActivity implements PurchasesUpdatedListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_coin);
 
-        ll_nativeAdsGetCoin = (LinearLayout) findViewById(R.id.ll_nativeAdsGetCoin);
         txtXu   = (TextView) findViewById(R.id.txtXu);
         rcvGetCoin  = (RecyclerView) findViewById(R.id.rcvGetCoin);
         img_premium = (ImageView) findViewById(R.id.img_premium);
@@ -121,7 +104,6 @@ public class GetCoin extends AppCompatActivity implements PurchasesUpdatedListen
 
         setUpBillingClient();
 
-        nativeAds();
 
     }
 
@@ -362,84 +344,5 @@ public class GetCoin extends AppCompatActivity implements PurchasesUpdatedListen
         saveCoin();
     }
 
-    private void nativeAds() {
-        // NOTE always use test ads during development and testing
-        //StartAppSDK.setTestAdsEnabled(BuildConfig.DEBUG);
 
-//        setContentView(R.layout.recycler_view);
-
-        rcx_nativeAds_getCoin = findViewById(R.id.rcx_nativeAds_getCoin);
-        rcx_nativeAds_getCoin.setLayoutManager(new LinearLayoutManager(GetCoin.this, RecyclerView.VERTICAL, false));
-        rcx_nativeAds_getCoin.setAdapter(adapter = new AdapterWithNativeAd(GetCoin.this));
-
-        loadData();
-        loadNativeAd();
-    }
-
-    private void loadNativeAd() {
-        final StartAppNativeAd nativeAd = new StartAppNativeAd(GetCoin.this);
-
-        nativeAd.loadAd(new NativeAdPreferences()
-                .setAdsNumber(1)
-                .setAutoBitmapDownload(true)
-                .setPrimaryImageSize(2), new AdEventListener() {
-            @Override
-            public void onReceiveAd(Ad ad) {
-                if (adapter != null) {
-                    ll_nativeAdsGetCoin.setVisibility(View.VISIBLE);
-                    adapter.setNativeAd(nativeAd.getNativeAds());
-                }
-            }
-
-            @Override
-            public void onFailedToReceiveAd(Ad ad) {
-                if (BuildConfig.DEBUG) {
-                    Log.v(LOG_TAG, "onFailedToReceiveAd: " + ad.getErrorMessage());
-                }
-            }
-        });
-    }
-
-    // TODO example of loading JSON array, change this code according to your needs
-    @UiThread
-    private void loadData() {
-        if (adapter != null) {
-//            adapter.setData(Collections.singletonList("Loading..."));
-        }
-
-        AsyncTask.THREAD_POOL_EXECUTOR.execute(new Runnable() {
-            @Override
-            @WorkerThread
-            public void run() {
-                String url = "https://raw.githubusercontent.com/StartApp-SDK/StartApp_InApp_SDK_Example/master/app/data.json";
-
-                final List<String> data = new ArrayList<>();
-
-                try (InputStream is = new URL(url).openStream()) {
-                    if (is != null) {
-                        JsonReader reader = new JsonReader(new InputStreamReader(is));
-                        reader.beginArray();
-
-                        while (reader.peek() == JsonToken.STRING) {
-                            data.add(reader.nextString());
-                        }
-
-                        reader.endArray();
-                    }
-                } catch (RuntimeException | IOException ex) {
-                    data.clear();
-                    data.add(ex.toString());
-                } finally {
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            if (adapter != null) {
-//                                adapter.setData(data);
-//                            }
-//                        }
-//                    });
-                }
-            }
-        });
-    }
 }

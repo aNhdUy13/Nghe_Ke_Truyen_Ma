@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.nda.ngheketruyenma.MainActivity;
 import com.nda.ngheketruyenma.R;
 import com.squareup.picasso.Picasso;
-import com.startapp.sdk.ads.nativead.NativeAdDetails;
 
 import org.jetbrains.annotations.NotNull;
 

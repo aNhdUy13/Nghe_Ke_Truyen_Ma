@@ -28,13 +28,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
 
-        <meta-data
-            android:name="com.startapp.sdk.APPLICATION_ID"
-            android:value="206938824" />
-        <meta-data
-            android:name="com.startapp.sdk.RETURN_ADS_ENABLED"
-            android:value="false" />
-
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -53,13 +46,7 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name="com.startapp.sdk.adsbase.remoteconfig.BootCompleteListener"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
+
     </application>
 
 </manifest>

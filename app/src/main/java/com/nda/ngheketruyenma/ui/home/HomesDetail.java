@@ -39,17 +39,7 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 import com.nda.ngheketruyenma.R;
 import com.nda.ngheketruyenma.ui.API;
-import com.nda.ngheketruyenma.ui.home.nativeAds.AdapterWithNativeAd;
 import com.squareup.picasso.Picasso;
-import com.startapp.sdk.ads.banner.BannerListener;
-import com.startapp.sdk.ads.banner.Mrec;
-import com.startapp.sdk.ads.nativead.NativeAdPreferences;
-import com.startapp.sdk.ads.nativead.StartAppNativeAd;
-import com.startapp.sdk.adsbase.Ad;
-import com.startapp.sdk.adsbase.AutoInterstitialPreferences;
-import com.startapp.sdk.adsbase.StartAppAd;
-import com.startapp.sdk.adsbase.StartAppSDK;
-import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,13 +49,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomesDetail extends  YouTubeBaseActivity implements View.OnClickListener {
-    /*
-    Setup native ads
- */
-    private static final String LOG_TAG = HomesDetail.class.getSimpleName();
 
-    @Nullable
-    protected AdapterWithNativeAd adapter;
 
     RecyclerView recyclerView;
     LinearLayout ll_rcvHomeDetailNativeAds;
@@ -322,7 +306,6 @@ public class HomesDetail extends  YouTubeBaseActivity implements View.OnClickLis
         {
             mediaPlayer.stop();
             finish();
-            StartAppAd.showAd(this);
         }
 
 

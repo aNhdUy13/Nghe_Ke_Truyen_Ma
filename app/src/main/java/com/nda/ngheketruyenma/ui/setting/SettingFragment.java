@@ -24,13 +24,9 @@ import android.view.ViewGroup;
 
 import com.nda.ngheketruyenma.R;
 import com.nda.ngheketruyenma.databinding.FragmentSettingBinding;
-import com.nda.ngheketruyenma.ui.home.nativeAds.AdapterWithNativeAd;
 import com.nda.ngheketruyenma.ui.setting.billing.GetCoin;
 import com.nda.ngheketruyenma.ui.setting.premium.PremiumFunction;
-import com.startapp.sdk.ads.nativead.NativeAdPreferences;
-import com.startapp.sdk.ads.nativead.StartAppNativeAd;
-import com.startapp.sdk.adsbase.Ad;
-import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
+
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,19 +38,7 @@ import java.util.List;
 
 public class SettingFragment extends Fragment {
 
-    private static final String LOG_TAG = "native Ads";
-    /*
-            Regarding native ads
-         */
-    @Nullable
-    protected AdapterWithNativeAd adapter;
-    RecyclerView rcv_nativeAdsSetting;
-    CardView cv_nativeAdsSetting, cv_goToPremium;
-    /*
-        ( END ) Regarding native ads
-     */
 
-    
     CardView cvShareApp, cvGetCoin;
     private SettingViewModel settingViewModel;
     private FragmentSettingBinding binding;
@@ -68,7 +52,6 @@ public class SettingFragment extends Fragment {
         View root = binding.getRoot();
         mapting(root);
         initiate();
-        nativeAds();
 
         return root;
     }
@@ -89,12 +72,12 @@ public class SettingFragment extends Fragment {
             }
         });
 
-        cv_goToPremium.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getContext(), PremiumFunction.class));
-            }
-        });
+//        cv_goToPremium.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(getContext(), PremiumFunction.class));
+//            }
+//        });
     }
     private void shareApp() {
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -113,11 +96,7 @@ public class SettingFragment extends Fragment {
     private void mapting(View root) {
         cvShareApp  = (CardView) root.findViewById(R.id.cvShareApp);
         cvGetCoin  = (CardView) root.findViewById(R.id.cvGetCoin);
-
-        rcv_nativeAdsSetting    = (RecyclerView) root.findViewById(R.id.rcv_nativeAdsSetting);
-        cv_nativeAdsSetting     = (CardView) root.findViewById(R.id.cv_nativeAdsSetting);
-
-        cv_goToPremium          = (CardView) root.findViewById(R.id.cv_goToPremium);
+//        cv_goToPremium          = (CardView) root.findViewById(R.id.cv_goToPremium);
     }
 
     @Override
@@ -126,83 +105,5 @@ public class SettingFragment extends Fragment {
         binding = null;
     }
 
-    private void nativeAds() {
-        // NOTE always use test ads during development and testing
-        //StartAppSDK.setTestAdsEnabled(BuildConfig.DEBUG);
 
-//        setContentView(R.layout.recycler_view);
-
-        rcv_nativeAdsSetting.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        rcv_nativeAdsSetting.setAdapter(adapter = new AdapterWithNativeAd(getContext()));
-
-        loadData();
-        loadNativeAd();
-    }
-
-    private void loadNativeAd() {
-        final StartAppNativeAd nativeAd = new StartAppNativeAd(getContext());
-
-        nativeAd.loadAd(new NativeAdPreferences()
-                .setAdsNumber(1)
-                .setAutoBitmapDownload(true)
-                .setPrimaryImageSize(2), new AdEventListener() {
-            @Override
-            public void onReceiveAd(Ad ad) {
-                if (adapter != null) {
-                    cv_nativeAdsSetting.setVisibility(View.VISIBLE);
-                    adapter.setNativeAd(nativeAd.getNativeAds());
-                }
-            }
-
-            @Override
-            public void onFailedToReceiveAd(Ad ad) {
-                if (BuildConfig.DEBUG) {
-                    Log.v(LOG_TAG, "onFailedToReceiveAd: " + ad.getErrorMessage());
-                }
-            }
-        });
-    }
-
-    // TODO example of loading JSON array, change this code according to your needs
-    @UiThread
-    private void loadData() {
-        if (adapter != null) {
-//            adapter.setData(Collections.singletonList("Loading..."));
-        }
-
-        AsyncTask.THREAD_POOL_EXECUTOR.execute(new Runnable() {
-            @Override
-            @WorkerThread
-            public void run() {
-                String url = "https://raw.githubusercontent.com/StartApp-SDK/StartApp_InApp_SDK_Example/master/app/data.json";
-
-                final List<String> data = new ArrayList<>();
-
-                try (InputStream is = new URL(url).openStream()) {
-                    if (is != null) {
-                        JsonReader reader = new JsonReader(new InputStreamReader(is));
-                        reader.beginArray();
-
-                        while (reader.peek() == JsonToken.STRING) {
-                            data.add(reader.nextString());
-                        }
-
-                        reader.endArray();
-                    }
-                } catch (RuntimeException | IOException ex) {
-                    data.clear();
-                    data.add(ex.toString());
-                } finally {
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            if (adapter != null) {
-//                                adapter.setData(data);
-//                            }
-//                        }
-//                    });
-                }
-            }
-        });
-    }
 }

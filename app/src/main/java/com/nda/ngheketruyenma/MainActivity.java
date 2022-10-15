@@ -32,11 +32,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.nda.ngheketruyenma.databinding.ActivityMainBinding;
 import com.nda.ngheketruyenma.ui.ConnectionReceiver;
 import com.nda.ngheketruyenma.ui.home.HomeFragment;
-import com.nda.ngheketruyenma.ui.home.Homes;
-import com.nda.ngheketruyenma.ui.home.HomesAdapter;
-import com.nda.ngheketruyenma.ui.home.HomesDetail;
-import com.startapp.sdk.adsbase.StartAppAd;
-import com.startapp.sdk.adsbase.StartAppSDK;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,8 +56,6 @@ public class MainActivity extends AppCompatActivity {
         broadcastReceiver = new ConnectionReceiver();
         regisorNetworkBroadcast();
 
-        //StartAppSDK.setTestAdsEnabled(true);
-        StartAppAd.disableSplash();
         myRef.keepSynced(true);
 
 
